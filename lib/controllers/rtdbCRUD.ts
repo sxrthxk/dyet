@@ -1,29 +1,50 @@
 import { rtdb, auth } from "lib/config/firebaseConfig";
-import { ref, set, get, child } from "firebase/database";
-import { getAuth } from "firebase/auth";
-import { useState } from "react";
+import { ref, set, get, child, update } from "firebase/database";
 
-interface waterTrackerObject {
-  [date: string]: number;
+
+const waterIntakeCRUD = {
+
+  getWaterIntake: async(date: string) => {
+    const uid = auth.currentUser?.uid;
+    var intake = 0  ;
+    await get(child(ref(rtdb), `users/${uid}/${date}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        intake =  snapshot.val().intake;
+      } 
+    });
+    return intake;
+  },
+  setWaterIntake: async (intake: number) => {
+    const uid = auth.currentUser?.uid;
+    const date = new Date().toDateString();
+  
+    await update(ref(rtdb, `users/${uid}/${date}`), {
+      intake: intake,
+    });
+  }
 }
 
-const getWaterIntake = async(date: string) => {
-  const uid = auth.currentUser?.uid;
-  var intake = 0  ;
-  await get(child(ref(rtdb), `users/${uid}/${date}`)).then((snapshot) => {
-    if (snapshot.exists()) {
-      intake =  snapshot.val().intake;
-    } 
-  });
-  return intake;
-};
-const setWaterIntake = async (intake: number) => {
-  const uid = auth.currentUser?.uid;
-  const date = new Date().toDateString();
+export { waterIntakeCRUD };
 
-  await set(ref(rtdb, `users/${uid}/${date}`), {
-    intake: intake,
-  });
-};
+const sleepTrackerCRUD = {
+  getSleep: async(date: string) => {
+    const uid = auth.currentUser?.uid;
+    var expectedSleep = -1;
+    await get(child(ref(rtdb), `users/${uid}/${date}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        expectedSleep =  snapshot.val().expectedSleep;
+      } 
+    });
+    return expectedSleep;
+  },
+  setSleep: async(sleep: number) => {
+    const uid = auth.currentUser?.uid;
+    const date = new Date().toDateString();
 
-export { getWaterIntake, setWaterIntake };
+    await update(ref(rtdb, `users/${uid}/${date}`), {
+      expectedSleep: sleep
+    })
+  }
+}
+
+export { sleepTrackerCRUD }

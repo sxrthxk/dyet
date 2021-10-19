@@ -3,17 +3,18 @@ import WaterIntake from 'components/WaterIntake'
 import Card from 'components/Card'
 import Layout from 'components/Layout'
 import React from 'react'
+import ExpectedSleep from 'components/ExpectedSleep'
 
 const Home = () => {
     return (
         <Layout>
             <Container width="full" p="1rem">
-                <WaterIntake></WaterIntake>
+                <WaterIntake/>
                 <Card>
-                    Diet Intake Boyos
+                    Diet Intake
                 </Card>
-                <Card>Did you workout today bitch</Card>
-                <Card>Sleep expected</Card>
+                <Card>Did you workout today</Card>
+                <ExpectedSleep/>
             </Container>
         </Layout>
     )

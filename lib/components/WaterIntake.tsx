@@ -4,7 +4,7 @@ import Card from "./Card";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { IconButton } from "@chakra-ui/button";
 import { IoIosWater } from "react-icons/io";
-import { getWaterIntake, setWaterIntake } from "lib/controllers/rtdbCRUD";
+import { waterIntakeCRUD } from "lib/controllers/rtdbCRUD";
 import { child, get, onValue, ref } from "@firebase/database";
 import { auth, rtdb } from "config/firebaseConfig";
 import { useAuth } from "contexts/AuthContext";
@@ -12,14 +12,16 @@ import { CSSObject } from "@chakra-ui/styled-system";
 import { Spinner } from "@chakra-ui/react";
 
 const WaterIntake = () => {
-  const goal = 9;
+  const GOAL = 9;
+  // PLACEHOLDER VAR, WOULD REDUCE WITH DATA FETHCED FROM FIRESTORE LATER
 
   const { isUser } = useAuth();
 
   useEffect(() => {
-    if (isUser) {
+    console.log(isUser);
+    if (isUser === "yes") {
       const date = new Date().toDateString();
-      getWaterIntake(date).then((curCons) => {
+      waterIntakeCRUD.getWaterIntake(date).then((curCons) => {
         setWaterState((x) => ({
           ...x,
           currentConsumption: curCons,
@@ -34,7 +36,7 @@ const WaterIntake = () => {
 
   const [waterState, setWaterState] = useState({
     currentConsumption: 0,
-    goalConsumption: goal,
+    goalConsumption: GOAL,
   });
 
   const [loading, setLoading] = useState({
@@ -52,7 +54,7 @@ const WaterIntake = () => {
         ...x,
         currentConsumption: x.currentConsumption + 1,
       }));
-      await setWaterIntake(waterState.currentConsumption + 1);
+      await waterIntakeCRUD.setWaterIntake(waterState.currentConsumption + 1);
       setLoading((x) => ({
         ...x,
         action: false,
@@ -70,7 +72,7 @@ const WaterIntake = () => {
         ...x,
         currentConsumption: x.currentConsumption - 1,
       }));
-      await setWaterIntake(waterState.currentConsumption - 1);
+      await waterIntakeCRUD.setWaterIntake(waterState.currentConsumption - 1);
       setLoading((x) => ({
         ...x,
         action: false,
@@ -82,13 +84,13 @@ const WaterIntake = () => {
 
   return (
     <Card sx={loading.action ? disabledProps : undefined} height="12rem">
+      <Heading as="h1" fontSize="1.25rem" py="1rem" textAlign="center">
+        Track Your Water 🌊 consumption
+      </Heading>
       {loading.cardLoad ? (
         <Spinner m="auto" />
       ) : (
         <Flex direction="column" alignItems="center">
-          <Heading as="h1" fontSize="1.25rem" py="1rem" textAlign="center">
-            Track Your Water 🌊 consumption
-          </Heading>
           <Flex w="full" alignItems="center">
             <IconButton
               aria-label="Minus Button"
@@ -133,14 +135,8 @@ const WaterIntake = () => {
             </IconButton>
           </Flex>
           <Flex alignItems="center">
-            {false ? (
-              "Loading..."
-            ) : (
-              <>
-                <Heading pr="1">{waterState.currentConsumption}</Heading>
-                out of {waterState.goalConsumption} glasses.
-              </>
-            )}
+            <Heading pr="1">{waterState.currentConsumption}</Heading>
+            out of {waterState.goalConsumption} glasses.
           </Flex>
         </Flex>
       )}
