@@ -2,14 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   GoogleAuthProvider,
   signInWithRedirect,
-  User,
   Auth,
-  getAdditionalUserInfo,
-  getRedirectResult,
-  UserCredential,
 } from "firebase/auth";
 import { auth } from "config/firebaseConfig";
-import { useRouter } from "next/dist/client/router";
 
 const provider = new GoogleAuthProvider();
 

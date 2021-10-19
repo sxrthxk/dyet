@@ -1,43 +1,70 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { IconButton } from "@chakra-ui/button";
 import { IoIosWater } from "react-icons/io";
+import { getWaterIntake, setWaterIntake } from "lib/controllers/rtdbCRUD";
+import { child, get, onValue, ref } from "@firebase/database";
+import { auth, rtdb } from "config/firebaseConfig";
+import { useAuth } from "contexts/AuthContext";
+import { CSSObject } from "@chakra-ui/styled-system";
 
 const WaterIntake = () => {
-  const curCons = 5;
   const goal = 9;
 
-  const [waterState, setWaterState] = useState({
-    currentConsumption: curCons,
-    goalConsumption: goal,
-    barWidth: (curCons * 100) / goal,
-  });
-  console.log(waterState.barWidth);
+  const { isUser } = useAuth();
 
-  const addUnit = () => {
+  useEffect(() => {
+    if (isUser) {
+      const date = new Date().toDateString();
+      getWaterIntake(date).then((curCons) => {
+        setWaterState((x) => ({
+          ...x,
+          currentConsumption: curCons,
+        }));
+        setLoading(false);
+      });
+    }
+  }, [isUser]);
+
+  const [waterState, setWaterState] = useState({
+    currentConsumption: 0,
+    goalConsumption: goal,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  const addUnit = async () => {
+    setLoading(true);
     if (waterState.currentConsumption < waterState.goalConsumption) {
       setWaterState((x) => ({
         ...x,
         currentConsumption: x.currentConsumption + 1,
       }));
+      await setWaterIntake(waterState.currentConsumption + 1);
+      setLoading(false);
     }
   };
 
-  const removeUnit = () => {
+  const removeUnit = async () => {
+    setLoading(true);
     if (waterState.currentConsumption > 0) {
       setWaterState((x) => ({
         ...x,
         currentConsumption: x.currentConsumption - 1,
       }));
+      await setWaterIntake(waterState.currentConsumption - 1);
+      setLoading(false);
     }
   };
 
+  const disabledProps: CSSObject = { pointerEvents: "none", color: 'gray' };
+
   return (
-    <Card>
+    <Card sx={false ? disabledProps : undefined} height="12rem">
       <Flex direction="column" alignItems="center">
-        <Heading fontSize="1.25rem" py="1rem">
+        <Heading as="h1" fontSize="1.25rem" py="1rem">
           Track Your Water 🌊 consumption
         </Heading>
         <Flex w="full" alignItems="center">
@@ -83,10 +110,10 @@ const WaterIntake = () => {
             <AiFillPlusCircle size="1.5rem" fill="current" />
           </IconButton>
         </Flex>
-        <Text display="flex" alignItems="center">
-          <Heading pr="1">{waterState.currentConsumption}</Heading>
-          out of {waterState.goalConsumption} glasses.
-        </Text>
+        <Flex alignItems="center">
+          {false ? "Loading..." : <><Heading pr="1">{waterState.currentConsumption}</Heading>
+          out of {waterState.goalConsumption} glasses.</>}
+        </Flex>
       </Flex>
     </Card>
   );

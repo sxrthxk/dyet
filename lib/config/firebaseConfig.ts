@@ -1,4 +1,5 @@
-import { getAuth } from "@firebase/auth";
+import { getAuth } from "firebase/auth";
+import { getDatabase } from 'firebase/database'
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 
@@ -24,5 +25,7 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
+const rtdb = getDatabase(app);
+
 export default app;
-export { auth };
+export { auth, rtdb };
