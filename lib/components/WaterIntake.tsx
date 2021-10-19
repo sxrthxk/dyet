@@ -9,6 +9,7 @@ import { child, get, onValue, ref } from "@firebase/database";
 import { auth, rtdb } from "config/firebaseConfig";
 import { useAuth } from "contexts/AuthContext";
 import { CSSObject } from "@chakra-ui/styled-system";
+import { Spinner } from "@chakra-ui/react";
 
 const WaterIntake = () => {
   const goal = 9;
@@ -23,7 +24,10 @@ const WaterIntake = () => {
           ...x,
           currentConsumption: curCons,
         }));
-        setLoading(false);
+        setLoading({
+          action: false,
+          cardLoad: false
+        });
       });
     }
   }, [isUser]);
@@ -33,38 +37,54 @@ const WaterIntake = () => {
     goalConsumption: goal,
   });
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState({
+    cardLoad: true,
+    action: true
+  });
 
   const addUnit = async () => {
-    setLoading(true);
+    setLoading(x => ({
+        ...x,
+        action: true
+    }));
     if (waterState.currentConsumption < waterState.goalConsumption) {
       setWaterState((x) => ({
         ...x,
         currentConsumption: x.currentConsumption + 1,
       }));
       await setWaterIntake(waterState.currentConsumption + 1);
-      setLoading(false);
+      setLoading(x => ({
+        ...x,
+        action: false
+    }));
     }
   };
 
   const removeUnit = async () => {
-    setLoading(true);
+    setLoading(x => ({
+      ...x,
+      action: true
+  }));
     if (waterState.currentConsumption > 0) {
       setWaterState((x) => ({
         ...x,
         currentConsumption: x.currentConsumption - 1,
       }));
       await setWaterIntake(waterState.currentConsumption - 1);
-      setLoading(false);
+      setLoading(x => ({
+        ...x,
+        action: false
+    }));
     }
   };
 
-  const disabledProps: CSSObject = { pointerEvents: "none", color: 'gray' };
+  const disabledProps: CSSObject = { pointerEvents: "none"};
 
   return (
-    <Card sx={false ? disabledProps : undefined} height="12rem">
-      <Flex direction="column" alignItems="center">
-        <Heading as="h1" fontSize="1.25rem" py="1rem">
+    <Card sx={loading.action ? disabledProps : undefined} height="12rem">
+      {loading.cardLoad && <Spinner m="auto"/>}
+      {!loading.cardLoad && <Flex direction="column" alignItems="center">
+        <Heading as="h1" fontSize="1.25rem" py="1rem" textAlign="center">
           Track Your Water 🌊 consumption
         </Heading>
         <Flex w="full" alignItems="center">
@@ -114,7 +134,7 @@ const WaterIntake = () => {
           {false ? "Loading..." : <><Heading pr="1">{waterState.currentConsumption}</Heading>
           out of {waterState.goalConsumption} glasses.</>}
         </Flex>
-      </Flex>
+      </Flex>}
     </Card>
   );
 };
