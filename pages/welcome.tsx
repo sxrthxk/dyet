@@ -61,7 +61,7 @@ const Welcome = () => {
   const formSteps: JSX.Element[] = [
     <>
     <Field name="firstname">
-     {({field}: {field: }) => <FormControl id="firstname" my="1rem">
+     {(field: any) => <FormControl id="firstname" my="1rem">
         <Input
           placeholder="First Name"
           name="firstname"
