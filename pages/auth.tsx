@@ -16,7 +16,6 @@ const SignUp = () => {
   const router = useRouter();
 
   getRedirectResult(auth).then((credential: UserCredential | null) => {
-    console.log(credential);
     if (credential) {
       const additionalInfo = getAdditionalUserInfo(credential);
       if (additionalInfo?.isNewUser) {
@@ -24,7 +23,8 @@ const SignUp = () => {
       } else {
         router.push("/home");
       }
-    }
+    }  
+    
   });
 
   return (
