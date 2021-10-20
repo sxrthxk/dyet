@@ -4,6 +4,7 @@ import Card from 'components/Card'
 import Layout from 'components/Layout'
 import React from 'react'
 import ExpectedSleep from 'components/ExpectedSleep'
+import WorkoutTracker from 'components/WorkoutTracker'
 
 const Home = () => {
     return (
@@ -13,7 +14,7 @@ const Home = () => {
                 <Card>
                     Diet Intake
                 </Card>
-                <Card>Did you workout today</Card>
+                <WorkoutTracker />
                 <ExpectedSleep/>
             </Container>
         </Layout>

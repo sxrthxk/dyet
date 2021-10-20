@@ -48,3 +48,31 @@ const sleepTrackerCRUD = {
 }
 
 export { sleepTrackerCRUD }
+
+const workoutTrackerCRUD = {
+  getWorkout: async(date: string) => {
+    const uid = auth.currentUser?.uid;
+    var didWorkout = null;
+    await get(child(ref(rtdb), `users/${uid}/${date}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        didWorkout = snapshot.val().workoutDone;
+      } 
+    });
+    return didWorkout
+  },
+  setWorkout: async(didWorkout: boolean) => {
+    const uid = auth.currentUser?.uid;
+    const date = new Date().toDateString();
+    if(didWorkout) {
+      await update(ref(rtdb, `users/${uid}/${date}`), {
+        workoutDone: didWorkout
+      })
+    } else {
+      await update(ref(rtdb, `users/${uid}/${date}`), {
+        workoutDone: null
+      })
+    }
+  }
+}
+
+export { workoutTrackerCRUD }

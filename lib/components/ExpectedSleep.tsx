@@ -6,6 +6,8 @@ import { useAuth } from "contexts/AuthContext";
 import { sleepTrackerCRUD } from "lib/controllers/rtdbCRUD";
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
+import CustomSpinner from "./CustomSpinner";
+import HomeHeading from "./HomeHeading";
 
 const ExpectedSleep = () => {
   const sleepTracker = async(hour: number) => {
@@ -33,11 +35,9 @@ const ExpectedSleep = () => {
 
   return (
     <Card>
-      <Heading fontSize="1.25rem" m="auto" pt="1rem">
-        Track Your Sleep 😴 Time
-      </Heading>
+      <HomeHeading>Track Your Sleep 😴 Time</HomeHeading>
       {/* LOADING COMPONENT */}
-      {loadState === "loading" && <Spinner margin="auto" my="1rem" />}
+      {loadState === "loading" && <CustomSpinner />}
 
       {/* ALREADY TRACKED COMPONENT */}
       {loadState === "set" && (

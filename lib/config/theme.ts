@@ -6,7 +6,7 @@ const theme = extendTheme({
     primary: "#fff",
     secondary: "#000",
     Highlight: "#FF4C29",
-  }
+  },
 });
 
 export default theme;

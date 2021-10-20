@@ -10,6 +10,8 @@ import { auth, rtdb } from "config/firebaseConfig";
 import { useAuth } from "contexts/AuthContext";
 import { CSSObject } from "@chakra-ui/styled-system";
 import { Spinner } from "@chakra-ui/react";
+import HomeHeading from "./HomeHeading";
+import CustomSpinner from "./CustomSpinner";
 
 const WaterIntake = () => {
   const GOAL = 9;
@@ -83,14 +85,12 @@ const WaterIntake = () => {
   const disabledProps: CSSObject = { pointerEvents: "none" };
 
   return (
-    <Card sx={loading.action ? disabledProps : undefined} height="12rem">
-      <Heading as="h1" fontSize="1.25rem" py="1rem" textAlign="center">
-        Track Your Water 🌊 consumption
-      </Heading>
+    <Card sx={loading.action ? disabledProps : undefined}>
+      <HomeHeading>Track Your Water 🌊 consumption</HomeHeading>
       {loading.cardLoad ? (
-        <Spinner m="auto" />
+        <CustomSpinner />
       ) : (
-        <Flex direction="column" alignItems="center">
+        <Flex direction="column" alignItems="center" mt="2rem" mb="1rem">
           <Flex w="full" alignItems="center">
             <IconButton
               aria-label="Minus Button"
