@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import CustomSpinner from "./CustomSpinner";
 import HomeHeading from "./HomeHeading";
+import Tracked from "./Tracked";
 
 const ExpectedSleep = () => {
   const sleepTracker = async(hour: number) => {
@@ -41,10 +42,9 @@ const ExpectedSleep = () => {
 
       {/* ALREADY TRACKED COMPONENT */}
       {loadState === "set" && (
-        <Text fontSize="1.1rem" fontWeight="semibold" p="1rem">
-          <CheckCircleIcon fill="current" color="Highlight" mr="0.5rem" />
+        <Tracked>
           Sleep Time has been tracked for today!
-        </Text>
+        </Tracked>
       )}
 
       {/* SELECTOR COMPONENT */}

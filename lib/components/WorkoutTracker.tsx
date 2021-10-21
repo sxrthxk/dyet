@@ -5,14 +5,13 @@ import { useAuth } from "contexts/AuthContext";
 import { workoutTrackerCRUD } from "lib/controllers/rtdbCRUD";
 import React, {
   ChangeEvent,
-  FormEvent,
-  HTMLInputTypeAttribute,
   useEffect,
   useState,
 } from "react";
 import Card from "./Card";
 import CustomSpinner from "./CustomSpinner";
 import HomeHeading from "./HomeHeading";
+import Tracked from "./Tracked";
 
 const WorkoutTracker = () => {
   const [workoutTracked, setWorkoutTracked] = useState(false);
@@ -63,10 +62,9 @@ const WorkoutTracker = () => {
     <Card>
       <HomeHeading>Track Your Workout 🦍</HomeHeading>
       {loadState === "set" && (
-        <Text fontSize="1.1rem" fontWeight="semibold" p="1rem">
-          <CheckCircleIcon fill="current" color="Highlight" mr="0.5rem" />
+        <Tracked>
           {"Today's workout has been tracked!"}
-        </Text>
+        </Tracked>
       )}
       {loadState === "loading" && <CustomSpinner />}
       {loadState === "unset" && (

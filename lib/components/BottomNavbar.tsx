@@ -4,7 +4,7 @@ import Card from './Card'
 
 const BottomNavbar = () => {
     return (
-        <Flex position="fixed" bottom="0" w="full" bg="blackAlpha.400" justifyContent="center">
+        <Flex position="fixed" bottom="0" left="0" w="100%" bg="blackAlpha.800" justifyContent="center">
             {['🍕','🍔','🍟','🌭'].map((item, index) => <Card key={index}>
                 {item}
             </Card>)}

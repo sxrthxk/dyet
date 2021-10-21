@@ -1,4 +1,11 @@
 import { Box } from "@chakra-ui/layout";
+import {
+  Drawer,
+  useDisclosure,
+  DrawerOverlay,
+  DrawerBody,
+  DrawerCloseButton,
+} from "@chakra-ui/react";
 import { CSSObject } from "@chakra-ui/styled-system";
 import React from "react";
 import BottomNavbar from "./BottomNavbar";
@@ -6,7 +13,7 @@ import BottomNavbar from "./BottomNavbar";
 const Layout = ({
   children,
   isFlexCentered = false,
-  hasBottomNavbar = true
+  hasBottomNavbar = true,
 }: {
   children: JSX.Element | string | null | never[];
   isFlexCentered?: boolean;
@@ -17,10 +24,10 @@ const Layout = ({
   } = {
     flexboxLayout: {
       display: isFlexCentered ? "flex" : "block",
-      color: 'primary',
+      color: "primary",
       bg: "#082032",
-      height: "100vh",
-      width: "100vw",
+      height: hasBottomNavbar ? "calc(100vh + 10rem)" : "100vh",
+      width: "100%",
       boxSizing: "border-box",
       justifyContent: isFlexCentered ? "center" : undefined,
       alignItems: isFlexCentered ? "center" : undefined,
@@ -29,10 +36,10 @@ const Layout = ({
 
   return (
     <>
-    <Box as="main" sx={styles.flexboxLayout}>
-      {children}
-    </Box>
-    <BottomNavbar />
+      <Box as="main" sx={styles.flexboxLayout}>
+        {children}
+      </Box>
+      {/* <BottomNavbar /> */}
     </>
   );
 };
