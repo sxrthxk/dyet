@@ -13,19 +13,25 @@ import { Input } from "@chakra-ui/input";
 import { Button, IconButton } from "@chakra-ui/button";
 import { Box, Center, Flex, Text } from "@chakra-ui/layout";
 import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { FoodItem } from "./FoodTracker";
 
-interface FoodItem {
-  title: string;
-  quantity: string;
-  desc: string;
+interface CustomDrawerProps extends Omit<DrawerProps, "children"> {
+  setFoodItems: React.Dispatch<React.SetStateAction<FoodItem[]>>;
 }
 
-const FoodDrawer = ({ isOpen, onClose }: Omit<DrawerProps, "children">) => {
+const FoodDrawer = ({ isOpen, onClose, setFoodItems }: CustomDrawerProps) => {
   const FoodItems: FoodItem[] = [
     {
+      id: 1,
       title: "Protein Shake",
       quantity: "30g",
       desc: "in water",
+    },
+    {
+      id: 2,
+      title: "Dal",
+      quantity: "1 Cup",
+      desc: "moong dal/yellow dal",
     },
   ];
 
@@ -40,12 +46,9 @@ const FoodDrawer = ({ isOpen, onClose }: Omit<DrawerProps, "children">) => {
           <Input placeholder="Type here..." />
         </DrawerBody>
         <Box maxH="37.5vh" overflowY="auto">
-          <FoodCard food={FoodItems[0]} />
-          <FoodCard food={FoodItems[0]} />
-          <FoodCard food={FoodItems[0]} />
-          <FoodCard food={FoodItems[0]} />
-          <FoodCard food={FoodItems[0]} />
-          <FoodCard food={FoodItems[0]} />
+          {FoodItems.map((foodItem, index) => (
+            <FoodCard key={foodItem.id} food={foodItem} />
+          ))}
         </Box>
 
         <DrawerFooter>
@@ -63,7 +66,14 @@ export default FoodDrawer;
 
 const FoodCard = ({ food }: { food: FoodItem }) => {
   return (
-    <Flex mx="1rem" my="0.5rem" p="1rem" bg="blackAlpha.200" rounded="lg" justifyContent="space-between">
+    <Flex
+      mx="1rem"
+      my="0.5rem"
+      p="1rem"
+      bg="blackAlpha.200"
+      rounded="lg"
+      justifyContent="space-between"
+    >
       <Flex flexDir="column">
         <Flex>
           <Text fontWeight="semibold">{food.title}</Text>
@@ -74,7 +84,7 @@ const FoodCard = ({ food }: { food: FoodItem }) => {
         <Text color="blackAlpha.500">{food.desc}</Text>
       </Flex>
       <IconButton aria-label="Add">
-            <AddIcon />
+        <AddIcon />
       </IconButton>
     </Flex>
   );

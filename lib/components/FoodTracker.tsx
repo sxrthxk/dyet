@@ -1,11 +1,11 @@
 import { Button, IconButton } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { Text } from "@chakra-ui/layout";
+import { Flex, Text } from "@chakra-ui/layout";
 import { Input } from "@chakra-ui/input";
 
 import { Box } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { FcPlus } from "react-icons/fc";
 import Card from "./Card";
@@ -13,16 +13,31 @@ import CustomSpinner from "./CustomSpinner";
 import HomeHeading from "./HomeHeading";
 import FoodDrawer from "./FoodDrawer";
 
+interface FoodItem {
+  id: number;
+  title: string;
+  quantity: string;
+  desc: string;
+}
+export type { FoodItem };
+
 const FoodTracker = () => {
-  const {
-    getButtonProps,
-    getDisclosureProps,
-    isOpen,
-    onClose,
-    onToggle,
-    onOpen,
-  } = useDisclosure();
-  const btnRef = React.useRef();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([
+    {
+      id: 1,
+      title: "Protein Shake",
+      quantity: "30g",
+      desc: "in water",
+    },
+    {
+      id: 2,
+      title: "Protein Shake",
+      quantity: "30g",
+      desc: "in water",
+    },
+  ]);
 
   return (
     <>
@@ -31,7 +46,20 @@ const FoodTracker = () => {
 
         {false && <CustomSpinner />}
 
-        {true && (
+        {foodItems.length ? (
+          <Box mt="1rem" maxH="30rem" overflowY="auto">
+          {foodItems.map((fooditem, index) => (
+            <Flex justifyContent="space-between" key={fooditem.id} my="0.5rem" p="1rem" rounded="lg" boxShadow="" bg="blackAlpha.300">
+              <Text fontSize="1.25rem" fontWeight="semibold">
+              {fooditem.title}
+              </Text>
+              <Text>
+                {fooditem.quantity}
+              </Text>
+            </Flex>
+          ))}
+          </Box>
+        ) : (
           <Text my="1rem" fontWeight="medium" w="80%" mx="auto">
             No Food Items Tracked. Start adding by clicking the + icon.
           </Text>
@@ -40,7 +68,7 @@ const FoodTracker = () => {
         <IconButton
           rounded="full"
           _focus={{
-              border: "none"
+            border: "none",
           }}
           p="0"
           aria-label="Add"
@@ -53,7 +81,11 @@ const FoodTracker = () => {
         >
           <AddIcon />
         </IconButton>
-        <FoodDrawer isOpen={isOpen} onClose={onClose} />
+        <FoodDrawer
+          isOpen={isOpen}
+          onClose={onClose}
+          setFoodItems={setFoodItems}
+        />
       </Card>
     </>
   );
