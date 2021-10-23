@@ -11,7 +11,7 @@ const Home = () => {
         <Layout>
             <Container width="full" p="1rem">
                 <WaterIntake/>
-                <FoodTracker />
+                {/* <FoodTracker /> */}
                 <WorkoutTracker />
                 <ExpectedSleep/>
             </Container>

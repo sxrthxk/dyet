@@ -40,12 +40,12 @@ const WorkoutTracker = () => {
   type WorkoutSplit = Record<WeekDays, string>;
 
   const workoutSplit: WorkoutSplit = {
-    Mon: "Push",
-    Tue: "Pull",
-    Wed: "Legs",
-    Thu: "Push",
-    Fri: "Pull",
-    Sat: "Legs",
+    Mon: "Chest & Triceps",
+    Tue: "Back & Biceps",
+    Wed: "Legs & Shoulders",
+    Thu: "Chest & Triceps",
+    Fri: "Back & Biceps",
+    Sat: "Legs & Shoulders",
     Sun: "Rest",
   };
 

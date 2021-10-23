@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Drawer,
   DrawerBody,
@@ -14,6 +14,8 @@ import { Button, IconButton } from "@chakra-ui/button";
 import { Box, Center, Flex, Text } from "@chakra-ui/layout";
 import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { FoodItem } from "./FoodTracker";
+import { AiOutlineLoading } from "react-icons/ai";
+import { IoIosCheckboxOutline } from "react-icons/io";
 
 interface CustomDrawerProps extends Omit<DrawerProps, "children"> {
   setFoodItems: React.Dispatch<React.SetStateAction<FoodItem[]>>;
@@ -35,6 +37,10 @@ const FoodDrawer = ({ isOpen, onClose, setFoodItems }: CustomDrawerProps) => {
     },
   ];
 
+  const addItem = (foodItem: FoodItem) => {
+    setFoodItems((x) => [...x, foodItem]);
+  };
+
   return (
     <Drawer isOpen={isOpen} placement="bottom" onClose={onClose}>
       <DrawerOverlay />
@@ -47,7 +53,11 @@ const FoodDrawer = ({ isOpen, onClose, setFoodItems }: CustomDrawerProps) => {
         </DrawerBody>
         <Box maxH="37.5vh" overflowY="auto">
           {FoodItems.map((foodItem, index) => (
-            <FoodCard key={foodItem.id} food={foodItem} />
+            <FoodCard
+              key={foodItem.id}
+              food={foodItem}
+              addItem={addItem}
+            />
           ))}
         </Box>
 
@@ -64,7 +74,21 @@ const FoodDrawer = ({ isOpen, onClose, setFoodItems }: CustomDrawerProps) => {
 
 export default FoodDrawer;
 
-const FoodCard = ({ food }: { food: FoodItem }) => {
+const FoodCard = ({
+  food,
+  addItem,
+}: {
+  food: FoodItem;
+  addItem: (foodItem: FoodItem) => void;
+}) => {
+
+  const [addState, setAddState] = useState<"none" | "adding" | "added">("none")
+
+  const addHandler = async() => {
+    
+    await addItem(food);
+  };
+
   return (
     <Flex
       mx="1rem"
@@ -83,8 +107,8 @@ const FoodCard = ({ food }: { food: FoodItem }) => {
         </Flex>
         <Text color="blackAlpha.500">{food.desc}</Text>
       </Flex>
-      <IconButton aria-label="Add">
-        <AddIcon />
+      <IconButton aria-label="Add" onClick={addHandler}>
+        {<AddIcon />}
       </IconButton>
     </Flex>
   );

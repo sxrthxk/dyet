@@ -19,25 +19,13 @@ interface FoodItem {
   quantity: string;
   desc: string;
 }
+
 export type { FoodItem };
 
 const FoodTracker = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const [foodItems, setFoodItems] = useState<FoodItem[]>([
-    {
-      id: 1,
-      title: "Protein Shake",
-      quantity: "30g",
-      desc: "in water",
-    },
-    {
-      id: 2,
-      title: "Protein Shake",
-      quantity: "30g",
-      desc: "in water",
-    },
-  ]);
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
 
   return (
     <>
